@@ -1,0 +1,25 @@
+{
+  "name": "download-counter",
+  "version": "1.0.0",
+  "description": "Tracks download counts for a minio bucket.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node dist",
+    "dev": "ts-node src",
+    "build": "tsc",
+    "lint": "ts-standard | snazzy"
+  },
+  "author": "traxam",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/minio": "^7.0.7",
+    "snazzy": "^9.0.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "minio": "^7.0.18",
+    "ts-standard": "^10.0.0"
+  }
+}
