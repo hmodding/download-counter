@@ -1,51 +1,30 @@
-import { Client,  } from 'minio'
-import { config } from 'dotenv'
-
-interface Notification {
-    s3: {
-        object: {
-            key: string;
-        }
-    }
-}
+import { Client } from 'minio'
+import { config as configureDotenv } from 'dotenv'
+import { getMinIOConfiguration } from './environment-configuration'
+import { ObjectAccessedNotification } from './ObjectAccessedNotification'
+import { PostgresDatabase } from './PostgresDatabase'
 
 // load and parse .env variables
-config()
+configureDotenv()
 
-const accessKey = process.env.MINIO_ACCESS_KEY
-if (accessKey === undefined) {
-  throw new Error()
-}
+const database = new PostgresDatabase()
+database.connect();
 
-const secretKey = process.env.MINIO_SECRET_KEY
-if (secretKey === undefined) {
-  throw new Error()
-}
-
-const endPoint = process.env.MINIO_ENDPOINT
-if (endPoint === undefined) {
-  throw new Error()
-}
-
-const bucketName = process.env.MINIO_BUCKET
-if (bucketName === undefined) {
-  throw new Error()
-}
-
-const client = new Client({
-  accessKey,
-  secretKey,
-  endPoint,
-  port: 443,
-  useSSL: true
-})
+const minioCfg = getMinIOConfiguration()
+const client = new Client(minioCfg)
 
 const events = [
   's3:ObjectAccessed:Get'
 ]
 
-const ee = client.listenBucketNotification(bucketName, '', '', events)
-ee.on('notification', event => {
-  const notification = event as Notification;
+const ee = client.listenBucketNotification(minioCfg.bucketName, '', '', events)
+ee.on('error', err => {
+  console.log('err')
+  console.log(err)
+})
+
+ee.on('notification', async event => {
+  const notification = event as ObjectAccessedNotification
   console.log(notification.s3.object.key)
+  await database.incrementDownloadCount(notification.s3.object.key)
 })
