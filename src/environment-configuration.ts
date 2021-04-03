@@ -8,7 +8,7 @@ export function getConfiguration (): Configuration {
   return {
     environment: getEnvironment(),
     minIO: getMinIOConfiguration(),
-    postgresConnectionString: getPostgresConfiguration()
+    databaseUrl: getDatabaseUrl()
   }
 }
 
@@ -87,10 +87,10 @@ function getMIOPort (): number {
   return port
 }
 
-function getPostgresConfiguration (): string {
-  const pgString = process.env.POSTGRES_CONNECTION_STRING
-  if (pgString === undefined) {
-    throw new Error('Postgres connection string (POSTGRES_CONNECTION_STRING env variable) is not configured!')
+function getDatabaseUrl (): string {
+  const url = process.env.DATABASE_URL
+  if (url === undefined) {
+    throw new Error('Database connection string (DATABASE_URL env variable) is not configured!')
   }
-  return pgString
+  return url
 }

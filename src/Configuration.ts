@@ -13,7 +13,7 @@ export interface Configuration {
   /**
    * Connection string for the postgres database.
    */
-  postgresConnectionString: string
+  databaseUrl: string
 }
 
 /**

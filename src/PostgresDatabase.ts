@@ -10,7 +10,7 @@ export class PostgresDatabase implements Database {
 
   constructor () {
     this.client = new Client({
-      connectionString: getConfiguration().postgresConnectionString
+      connectionString: getConfiguration().databaseUrl
     })
   }
 
@@ -23,7 +23,7 @@ export class PostgresDatabase implements Database {
   }
 
   async getDownloadCount (file: string): Promise<number> {
-    const res = await this.client.query('SELECT downloads FROM files WHERE key = $1', [file])
+    const res = await this.client.query('SELECT download_counts FROM files WHERE file = $1', [file])
     if (res.rowCount === 0) {
       return 0
     } else {
@@ -32,6 +32,6 @@ export class PostgresDatabase implements Database {
   }
 
   async incrementDownloadCount (file: string): Promise<void> {
-    await this.client.query('INSERT INTO files (key, downloads) VALUES ($1, 1) ON CONFLICT DO UPDATE SET downloads = downloads + 1', [file])
+    await this.client.query('INSERT INTO download_counts (file, downloads) VALUES ($1, 1) ON CONFLICT (file) DO UPDATE SET downloads = download_counts.downloads + 1', [file])
   }
 }
