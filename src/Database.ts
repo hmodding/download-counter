@@ -23,6 +23,14 @@ export interface Database {
   getDownloadCount: (file: string) => Promise<number>
 
   /**
+   * Gets the sum amount of downloads for the files in a given directory.
+   * @param directory the directory path within the bucket.
+   * @returns the sum amount of downloads for the files in a given directory
+   *   or 0 if the directory was not found.
+   */
+  getDownloadCountForDirectory: (file: string) => Promise<number>
+
+  /**
    * Increments the download count of a given file by 1.
    * @param file the file key inside of the bucket.
    */

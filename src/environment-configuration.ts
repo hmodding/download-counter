@@ -1,4 +1,4 @@
-import { Configuration, MinIOConfiguration } from './Configuration'
+import { ApiServerConfiguration, Configuration, MinIOConfiguration } from './Configuration'
 
 /**
  * Reads the configuration from environment variables.
@@ -8,7 +8,9 @@ export function getConfiguration (): Configuration {
   return {
     environment: getEnvironment(),
     minIO: getMinIOConfiguration(),
-    databaseUrl: getDatabaseUrl()
+    databaseUrl: getDatabaseUrl(),
+    sentryDSN: getSentryDSN(),
+    apiServer: getApiServerConfiguration()
   }
 }
 
@@ -93,4 +95,33 @@ function getDatabaseUrl (): string {
     throw new Error('Database connection string (DATABASE_URL env variable) is not configured!')
   }
   return url
+}
+
+function getSentryDSN(): string {
+  const dsn = process.env.SENTRY_DSN
+  if (dsn === undefined) {
+    throw new Error('Sentry DSN (SENTRY_DSN env variable) is not configured!')
+  }
+  return dsn
+}
+
+/**
+ * Reads the ApiServerConfiguration from env variables.
+ * @returns the ApiServerConfiguration.
+ * @throws an error if any configuration value is invalid.
+ */
+export function getApiServerConfiguration (): ApiServerConfiguration {
+  const portString = process.env.API_SERVER_PORT
+  if (portString === undefined) {
+    throw new Error('API server port (API_SERVER_PORT env variable) is not configured!')
+  }
+
+  const port = parseInt(portString, 10)
+  if (isNaN(port)) {
+    throw new Error('API server port (API_SERVER_PORT env variable) is not a valid number!')
+  }
+
+  return {
+    port
+  }
 }

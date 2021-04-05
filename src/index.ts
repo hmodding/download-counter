@@ -4,10 +4,12 @@ import { getConfiguration, getMinIOConfiguration } from './environment-configura
 import { ObjectAccessedNotification } from './ObjectAccessedNotification'
 import { PostgresDatabase } from './PostgresDatabase'
 import { configureDefaultLogger, createModuleLogger } from './logger'
+import { ApiServer } from './ApiServer'
+import { configureSentry } from './sentry'
 
 // load and parse .env variables
 configureDotenv()
-const config = getConfiguration();
+const config = getConfiguration()
 
 configureDefaultLogger()
 const logger = createModuleLogger('index')
@@ -16,9 +18,12 @@ if (config.environment === 'development') {
   logger.warn('Running in development mode. Make sure to set NODE_ENV=production in production environments!')
 }
 
+configureSentry()
+
 const database = new PostgresDatabase()
 database.connect()
 
+new ApiServer(database)
 
 const client = new Client(config.minIO)
 

@@ -14,6 +14,14 @@ export interface Configuration {
    * Connection string for the postgres database.
    */
   databaseUrl: string
+  /**
+   * Sentry logging key.
+   */
+  sentryDSN: string
+  /**
+   * API-Server-related variables.
+   */
+  apiServer: ApiServerConfiguration
 }
 
 /**
@@ -42,6 +50,16 @@ export interface MinIOConfiguration {
   bucketName: string
   /**
    * The of the MinIO endpoint.
+   */
+  port: number
+}
+
+/**
+ * A collection of configurable variables for the API server connection.
+ */
+export interface ApiServerConfiguration {
+  /**
+   * The port to expose the API server on.
    */
   port: number
 }
