@@ -1,26 +1,32 @@
 import { Client } from 'minio'
 import { config as configureDotenv } from 'dotenv'
-import { getMinIOConfiguration } from './environment-configuration'
+import { getConfiguration, getMinIOConfiguration } from './environment-configuration'
 import { ObjectAccessedNotification } from './ObjectAccessedNotification'
 import { PostgresDatabase } from './PostgresDatabase'
 import { configureDefaultLogger, createModuleLogger } from './logger'
 
 // load and parse .env variables
 configureDotenv()
+const config = getConfiguration();
+
 configureDefaultLogger()
 const logger = createModuleLogger('index')
+
+if (config.environment === 'development') {
+  logger.warn('Running in development mode. Make sure to set NODE_ENV=production in production environments!')
+}
 
 const database = new PostgresDatabase()
 database.connect()
 
-const minioCfg = getMinIOConfiguration()
-const client = new Client(minioCfg)
+
+const client = new Client(config.minIO)
 
 const events = [
   's3:ObjectAccessed:Get'
 ]
 
-const ee = client.listenBucketNotification(minioCfg.bucketName, '', '', events)
+const ee = client.listenBucketNotification(config.minIO.bucketName, '', '', events)
 ee.on('error', err => {
   logger.error(err)
 })
