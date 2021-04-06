@@ -4,10 +4,13 @@
   "description": "Tracks download counts for a minio bucket.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node dist",
+    "start": "node dist/index.js",
     "dev": "ts-node src",
     "build": "tsc",
     "lint": "ts-standard | snazzy"
+  },
+  "engines": {
+    "node": "15.x"
   },
   "author": "traxam",
   "license": "MIT",
