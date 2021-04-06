@@ -111,14 +111,14 @@ function getSentryDSN(): string {
  * @throws an error if any configuration value is invalid.
  */
 export function getApiServerConfiguration (): ApiServerConfiguration {
-  const portString = process.env.API_SERVER_PORT
+  const portString = process.env.PORT
   if (portString === undefined) {
-    throw new Error('API server port (API_SERVER_PORT env variable) is not configured!')
+    throw new Error('API server port (PORT env variable) is not configured!')
   }
 
   const port = parseInt(portString, 10)
   if (isNaN(port)) {
-    throw new Error('API server port (API_SERVER_PORT env variable) is not a valid number!')
+    throw new Error('API server port (PORT env variable) is not a valid number!')
   }
 
   return {
