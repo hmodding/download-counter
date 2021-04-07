@@ -49,7 +49,7 @@ export interface MinIOConfiguration {
    */
   bucketName: string
   /**
-   * The of the MinIO endpoint.
+   * The port of the MinIO endpoint.
    */
   port: number
 }
