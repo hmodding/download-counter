@@ -4,9 +4,12 @@ individual files and whole folders that are served from a
 [MinIO](https://min.io) object storage bucket.
 
 ## Table of Contents
+* [Development Setup](#Development-Setup)
 * [File structure](#File-structure)
+* [API](#API)
+  * [Endpoints](#Endpoints)
+  * [Errors](#Errors)
 * [Configuration](#Configuration)
-* [Development notes](#Development-notes)
 * [Deployment](#Deployment)
 * [License](#License)
 
